@@ -12,7 +12,7 @@ const connectDB = async () => {
 const usersData = [
   { name: "Ritesh", email: "test1@mail.com" },
   { name: "Rohit", email: "rohit@mail.com" },
-  { name: "Alok", email: "Alok@mail.com" },
+  { name: "Alok", email: "alok@mail.com" },
   { name: "Sujit", email: "sujit@mail.com" },
   { name: "Pawan", email: "pawan@mail.com" }
 ];
@@ -28,9 +28,15 @@ const seedDatabase = async () => {
   try {
     await connectDB();
 
-    console.log("Clearing existing data...");
-    await User.deleteMany();
-    await Post.deleteMany();
+    const SEED_MODE = process.env.SEED_MODE || "reset";
+
+    if (SEED_MODE === "reset") {
+      console.log("Resetting database...");
+      await User.deleteMany();
+      await Post.deleteMany();
+    } else {
+      console.log("Appending seed data...");
+    }
 
     console.log("Creating users...");
     const passwordHash = await bcrypt.hash("password123", 10);
@@ -48,14 +54,17 @@ const seedDatabase = async () => {
     for (let i = 0; i < 15; i++) {
       const author = users[i % users.length];
       const category = categories[i % categories.length];
+      const isDraft = false;
 
       posts.push({
         title: `Sample Blog Post ${i + 1}`,
         content: sampleContent,
         category,
         author: author._id,
-        status: i % 3 === 0 ? "draft" : "published"
+        status: "published",
+        image: "/uploads/seed-placeholder.png"
       });
+
     }
 
     await Post.insertMany(posts);
@@ -63,7 +72,7 @@ const seedDatabase = async () => {
     console.log("Seed data created successfully");
     process.exit();
   } catch (error) {
-    console.error(" Seed failed", error);
+    console.error("Seed failed", error);
     process.exit(1);
   }
 };

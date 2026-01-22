@@ -26,7 +26,13 @@ export default function EditPost() {
       .catch(() => setLoading(false));
   }, [id]);
 
-  if (loading) return <p className="p-4">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center text-gray-500">
+        Loading post...
+      </div>
+    );
+  }
 
   const updatePost = async () => {
     const formData = new FormData();
@@ -40,40 +46,84 @@ export default function EditPost() {
   };
 
   return (
-    <div className="max-w-3xl mx-auto p-4">
-      <h1 className="text-xl font-bold mb-4">Edit Post</h1>
+    <section className="bg-gray-50 min-h-screen py-10">
+      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border px-6 py-8">
 
-      <input
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="w-full border p-2 mb-4"
-      />
+        {/* Header */}
+        <div className="mb-6">
+          <h1 className="text-3xl font-extrabold text-gray-900">
+            Edit Post
+          </h1>
+          <p className="text-sm text-gray-600 mt-1">
+            Update your article content and details
+          </p>
+        </div>
 
-      <ReactQuill value={content} onChange={setContent} />
+        {/* Title */}
+        <input
+          value={title}
+          onChange={(e) => setTitle(e.target.value)}
+          placeholder="Post title"
+          className="w-full text-2xl font-semibold border-b pb-2 mb-6 focus:outline-none focus:border-blue-500"
+        />
 
-      <select
-        value={category}
-        onChange={(e) => setCategory(e.target.value)}
-        className="mt-4 border p-2 w-full"
-      >
-        <option>Technology</option>
-        <option>Lifestyle</option>
-        <option>Business</option>
-        <option>Health</option>
-      </select>
+        {/* Editor */}
+        <div className="mb-6">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Content
+          </label>
+          <div className="rounded-lg overflow-hidden border">
+            <ReactQuill value={content} onChange={setContent} />
+          </div>
+        </div>
 
-      <input
-        type="file"
-        onChange={(e) => setImage(e.target.files[0])}
-        className="mt-4"
-      />
+        {/* Category */}
+        <div className="mb-6">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Category
+          </label>
+          <select
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            className="w-64 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          >
+            <option>Technology</option>
+            <option>Lifestyle</option>
+            <option>Business</option>
+            <option>Health</option>
+          </select>
+        </div>
 
-      <button
-        onClick={updatePost}
-        className="mt-4 bg-black text-white px-4 py-2 rounded"
-      >
-        Update Post
-      </button>
-    </div>
+        {/* Image Upload */}
+        <div className="mb-8">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Update Featured Image
+          </label>
+          <input
+            type="file"
+            onChange={(e) => setImage(e.target.files[0])}
+            className="block text-sm text-gray-600"
+          />
+        </div>
+
+        {/* Actions */}
+        <div className="flex justify-end gap-3">
+          <button
+            onClick={() => navigate(-1)}
+            className="px-6 py-2 rounded-lg border text-gray-700 hover:bg-gray-50 transition"
+          >
+            Cancel
+          </button>
+
+          <button
+            onClick={updatePost}
+            className="px-8 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+          >
+            Update Post
+          </button>
+        </div>
+
+      </div>
+    </section>
   );
 }

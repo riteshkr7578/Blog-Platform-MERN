@@ -51,6 +51,13 @@ Make sure you have the following installed:
 * **MongoDB** (Local or MongoDB Atlas)
 * npm (comes with Node.js)
 
+
+## ⚠️ Notes & Troubleshooting
+- While integrating **React Quill**, version compatibility issues were encountered during development.
+- To ensure stability with React 18 and Vite, a compatible version of `react-quill` was used.
+- If you face runtime or build errors related to React Quill, ensure the installed version matches the one specified in `package.json`.
+
+
 Check versions:
 
 ```bash

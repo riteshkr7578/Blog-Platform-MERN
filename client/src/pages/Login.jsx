@@ -5,17 +5,28 @@ import { useAuth } from "../context/AuthContext";
 
 export default function Login() {
   const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
   const { login } = useAuth();
   const navigate = useNavigate();
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+    setError(""); 
+  };
 
   const submit = async (e) => {
     e.preventDefault();
-    const res = await api.post("/auth/login", form);
-    login(res.data);
-    navigate("/");
+
+    try {
+      const res = await api.post("/auth/login", form);
+      login(res.data);
+      navigate("/");
+    } catch (err) {
+     
+      setError(
+        err.response?.data?.message || "Invalid email or password"
+      );
+    }
   };
 
   return (
@@ -30,6 +41,13 @@ export default function Login() {
         <p className="text-sm text-gray-500 text-center mb-6">
           Login to continue to BlogApp
         </p>
+
+        {/* ERROR MESSAGE */}
+        {error && (
+          <div className="mb-4 rounded-lg bg-red-50 border border-red-200 px-4 py-2 text-sm text-red-600">
+            {error}
+          </div>
+        )}
 
         {/* Email */}
         <div className="mb-4">
