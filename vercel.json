@@ -1,5 +1,9 @@
 {
-  "buildCommand": "npm run build --prefix client && npm install --prefix server",
-  "outputDirectory": "server"
+  "buildCommand": "npm install --prefix server && npm run build --prefix client",
+  "outputDirectory": "server",
+  "env": {
+    "VITE_API_URL": "@vite_api_url"
+  }
 }
+
 
