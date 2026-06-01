@@ -16,14 +16,19 @@ app.use("/api/auth", require("./routes/authRoutes"));
 app.use("/api/posts", require("./routes/postRoutes"));
 app.use("/api/comments", require("./routes/commentRoutes"));
 
-// Serve static client files
-const clientPath = path.join(__dirname, "../client/dist");
-app.use(express.static(clientPath));
-
-// SPA fallback - serve index.html for all non-API routes
-app.get("*", (req, res) => {
-  res.sendFile(path.join(clientPath, "index.html"));
-});
+// Serve static client files - handle both local and Vercel deployments
+const isDev = process.env.NODE_ENV !== "production";
+const clientPath = isDev 
+  ? path.join(__dirname, "../client/dist")
+  : path.join(__dirname, "../client/dist");
+  
+if (require("fs").existsSync(clientPath)) {
+  app.use(express.static(clientPath));
+  // SPA fallback for all non-API routes
+  app.get("*", (req, res) => {
+    res.sendFile(path.join(clientPath, "index.html"));
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

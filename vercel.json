@@ -1,9 +1,28 @@
 {
-  "buildCommand": "npm install --prefix server && npm run build --prefix client",
-  "outputDirectory": "server",
-  "env": {
-    "VITE_API_URL": "@vite_api_url"
-  }
+  "builds": [
+    {
+      "src": "server/server.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "client/package.json",
+      "use": "@vercel/static-build",
+      "config": {
+        "distDir": "dist"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/api/(.*)",
+      "dest": "server/server.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "client/dist/index.html"
+    }
+  ]
 }
+
 
 
