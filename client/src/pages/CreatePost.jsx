@@ -38,60 +38,67 @@ export default function CreatePost() {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen py-10">
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border px-6 py-8">
+    <section className="bg-slate-50/30 dark:bg-[#0b0f19] min-h-[calc(100vh-76px)] py-12 md:py-16 transition-all duration-300">
+      <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/40 dark:shadow-none px-6 sm:px-10 py-10 transition-all duration-300">
         
         {/* Header */}
-        <h1 className="text-3xl font-extrabold text-gray-900 mb-6">
-          Create New Post
-        </h1>
+        <div className="mb-8">
+          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+            Authoring Studio
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight mt-1">
+            Create New Post
+          </h1>
+        </div>
 
         {/* Title */}
         <input
-          className="w-full text-2xl font-semibold border-b focus:outline-none focus:border-blue-500 pb-2 mb-6 placeholder-gray-400"
-          placeholder="Post title"
+          className="w-full text-2xl sm:text-3xl font-extrabold border-b border-slate-100 dark:border-slate-800 bg-transparent focus:outline-none focus:border-indigo-500 pb-3 mb-8 placeholder-slate-300 dark:placeholder-slate-600 text-slate-800 dark:text-slate-100 tracking-tight"
+          placeholder="Enter a captivating article title..."
           value={title}
           onChange={(e) => setTitle(e.target.value)}
         />
 
         {/* Image Upload */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+        <div className="mb-8 bg-slate-50/50 dark:bg-slate-950/40 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
             Featured Image
           </label>
           <input
             type="file"
             accept="image/*"
             onChange={handleImage}
-            className="block w-full text-sm text-gray-600"
+            className="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 dark:file:bg-indigo-950/30 file:text-indigo-600 dark:file:text-indigo-400 hover:file:bg-indigo-100 dark:hover:file:bg-indigo-950/50 transition cursor-pointer"
           />
 
           {preview && (
-            <img
-              src={preview}
-              className="mt-4 h-52 w-full object-cover rounded-lg border"
-              alt="preview"
-            />
+            <div className="mt-4 rounded-xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800 max-h-64">
+              <img
+                src={preview}
+                className="w-full h-64 object-cover"
+                alt="preview"
+              />
+            </div>
           )}
         </div>
 
         {/* Editor */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Content
+        <div className="mb-8">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            Article Content
           </label>
-          <div className="rounded-lg overflow-hidden border">
+          <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
             <ReactQuill value={content} onChange={setContent} />
           </div>
         </div>
 
         {/* Category */}
-        <div className="mb-8">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Category
+        <div className="mb-10">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            Select Category
           </label>
           <select
-            className="border rounded-lg px-4 py-2 w-60 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="form-input w-64"
             value={category}
             onChange={(e) => setCategory(e.target.value)}
           >
@@ -104,12 +111,12 @@ export default function CreatePost() {
         </div>
 
         {/* Action */}
-        <div className="flex justify-end">
+        <div className="flex justify-end gap-3 pt-6 border-t border-slate-50 dark:border-slate-850">
           <button
             onClick={submitPost}
-            className="bg-blue-600 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-700 transition"
+            className="btn-indigo px-8 py-3 text-base"
           >
-            Save Draft
+            Save as Draft
           </button>
         </div>
 

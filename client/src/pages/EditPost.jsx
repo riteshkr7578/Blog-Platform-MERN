@@ -43,7 +43,7 @@ export default function EditPost() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center text-gray-500">
+      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-[#0b0f19] text-slate-500 dark:text-slate-400 transition-all duration-300">
         Loading post...
       </div>
     );
@@ -61,16 +61,19 @@ export default function EditPost() {
   };
 
   return (
-    <section className="bg-gray-50 min-h-screen py-10">
-      <div className="max-w-4xl mx-auto bg-white rounded-xl shadow-sm border px-6 py-8">
+    <section className="bg-slate-50/30 dark:bg-[#0b0f19] min-h-[calc(100vh-76px)] py-12 md:py-16 transition-all duration-300">
+      <div className="max-w-4xl mx-auto bg-white dark:bg-slate-900 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/40 dark:shadow-none px-6 sm:px-10 py-10 transition-all duration-300">
 
         {/* Header */}
-        <div className="mb-6">
-          <h1 className="text-3xl font-extrabold text-gray-900">
+        <div className="mb-8">
+          <span className="text-xs font-bold uppercase tracking-wider text-indigo-600 dark:text-indigo-400">
+            Authoring Studio
+          </span>
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight mt-1">
             Edit Post
           </h1>
-          <p className="text-sm text-gray-600 mt-1">
-            Update your article content and details
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2 font-medium">
+            Update your article content and details.
           </p>
         </div>
 
@@ -78,29 +81,29 @@ export default function EditPost() {
         <input
           value={title}
           onChange={(e) => setTitle(e.target.value)}
-          placeholder="Post title"
-          className="w-full text-2xl font-semibold border-b pb-2 mb-6 focus:outline-none focus:border-blue-500"
+          placeholder="Enter a captivating article title..."
+          className="w-full text-2xl sm:text-3xl font-extrabold border-b border-slate-100 dark:border-slate-800 pb-3 mb-8 focus:outline-none focus:border-indigo-500 text-slate-800 dark:text-slate-100 placeholder-slate-300 dark:placeholder-slate-600 bg-transparent tracking-tight"
         />
 
         {/* Editor */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Content
+        <div className="mb-8">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            Article Content
           </label>
-          <div className="rounded-lg overflow-hidden border">
+          <div className="rounded-2xl overflow-hidden border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950">
             <ReactQuill value={content} onChange={setContent} />
           </div>
         </div>
 
         {/* Category */}
-        <div className="mb-6">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
-            Category
+        <div className="mb-8">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
+            Select Category
           </label>
           <select
             value={category}
             onChange={(e) => setCategory(e.target.value)}
-            className="w-64 border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="form-input w-64"
           >
             <option>Technology</option>
             <option>Lifestyle</option>
@@ -110,38 +113,40 @@ export default function EditPost() {
         </div>
 
         {/* Image Upload */}
-        <div className="mb-8">
-          <label className="block text-sm font-semibold text-gray-700 mb-2">
+        <div className="mb-10 bg-slate-50/50 dark:bg-slate-950/40 p-6 rounded-2xl border border-slate-100 dark:border-slate-800">
+          <label className="block text-sm font-semibold text-slate-700 dark:text-slate-300 mb-2">
             Update Featured Image
           </label>
           <input
             type="file"
             accept="image/*"
             onChange={handleImage}
-            className="block w-full text-sm text-gray-600 mb-4"
+            className="block w-full text-sm text-slate-500 file:mr-4 file:py-2.5 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-semibold file:bg-indigo-50 dark:file:bg-indigo-950/30 file:text-indigo-600 dark:file:text-indigo-400 hover:file:bg-indigo-100 dark:hover:file:bg-indigo-950/50 transition cursor-pointer mb-4"
           />
 
           {preview && (
-            <img
-              src={preview}
-              className="h-52 w-full object-cover rounded-lg border"
-              alt="preview"
-            />
+            <div className="rounded-xl overflow-hidden shadow-md border border-slate-100 dark:border-slate-800 max-h-64">
+              <img
+                src={preview}
+                className="w-full h-64 object-cover"
+                alt="preview"
+              />
+            </div>
           )}
         </div>
 
         {/* Actions */}
-        <div className="flex justify-end gap-3">
+        <div className="flex justify-end gap-3 pt-6 border-t border-slate-50 dark:border-slate-850">
           <button
             onClick={() => navigate(-1)}
-            className="px-6 py-2 rounded-lg border text-gray-700 hover:bg-gray-50 transition"
+            className="btn-outline-indigo px-6 py-2.5"
           >
             Cancel
           </button>
 
           <button
             onClick={updatePost}
-            className="px-8 py-2 rounded-lg bg-blue-600 text-white font-semibold hover:bg-blue-700 transition"
+            className="btn-indigo px-8 py-2.5"
           >
             Update Post
           </button>

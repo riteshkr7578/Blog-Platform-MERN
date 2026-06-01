@@ -1,65 +1,51 @@
-# 📝 Blog Platform with Content Management
+# ✍️ BlogSphere — Premium Full-Stack Magazine Platform
 
-A full-stack **Blog Platform** built using the **MERN stack**, allowing users to create, manage, and publish blog posts with rich text content, images, categories, comments, likes, and a draft–publish workflow.
+A full-stack **Blog Platform** built using the **MERN stack**, allowing users to create, manage, and publish blog posts with rich text content, images, categories, comments, likes, and a draft–publish workflow. 
 
-The application is designed to reflect **real-world content management behavior** with proper authentication, authorization, and clean UI.
+Recently upgraded to **BlogSphere**, this codebase has been extensively enhanced with a premium, state-of-the-art visual style, true dark mode integration, high-fidelity typography, and serverless-ready cloud storage integration.
 
------------------------------------------------------------------------
+---
 
-## 🚀 Features
+## 🚀 Key Features
 
-* User registration and JWT-based authentication
-* Create blog posts using a rich text editor
-* Upload featured images for posts
-* Draft and publish workflow
-* Public homepage showing published posts
-* Categorization of posts (Technology, Lifestyle, Business, Health, etc.)
-* Search posts by title or content
-* Like / Unlike functionality (published posts only)
-* Comment system with add & delete (author-only delete)
-* User profile page showing drafts and published posts
-* Responsive UI built with Tailwind CSS
+* **Branded Design (BlogSphere)**: A gorgeous modern publication aesthetic featuring clean lines, Plus Jakarta Sans typography, soft shadows, and card-based grid layouts.
+* **Persistent Dark & Light Mode Theme**: A class-based theme switcher driven by custom contexts, utilizing a persistent `localStorage` cache. Dark mode uses a highly readable, elegant midnight space palette (`#0b0f19`).
+* **Cloudinary Image Integration**: Upgraded from local directory uploads to streaming in-memory file buffers directly to **Cloudinary** cloud storage, making the server architecture 100% serverless-ready (e.g. Vercel).
+* **Rich Blog Content Typography (`.blog-content`)**: Custom-tailored typography engine designed to style rich HTML output (headers, lists, blockquotes, code fragments) with premium Medium/Substack-like layouts.
+* **User registration and JWT-based authentication** with automatic login/register validation and cross-route protections.
+* **Axios Interceptor Safeguards**: High-reliability interceptors that handle token-based autologouts while preventing page reloads on incorrect credentials.
+* **Draft and publish workflow**: Authors can write articles, save draft editions, preview in-realtime, and publish when ready.
+* **Search & Categorization**: Search posts instantly by title/contents; filter cleanly by categories like Technology, Lifestyle, Business, Health, and others.
+* **Threaded Discussions**: Responsive comment system with visual avatar markers and author-only delete actions.
+* **Engaging Likes**: Seamless like/unlike capability on published editorial posts.
 
---------------------------------------------------------------------------
+---
 
 ## 🛠 Tech Stack
 
 ### Frontend
-
-* React.js (Vite)
-* Tailwind CSS **v3**
-* React Quill (Rich Text Editor)
-* Axios
-* React Router v6
+* **Core**: React.js 18 (Vite)
+* **Styling**: Tailwind CSS **v3** (Class-based dark mode)
+* **Rich Text**: React Quill
+* **API Calls**: Axios (Custom Interceptors)
+* **Routing**: React Router v6
 
 ### Backend
-
-* Node.js **v22+**
-* Express.js
-* MongoDB (Mongoose)
-* JWT Authentication
-* Multer (Image Uploads)
-* bcrypt (Password hashing)
+* **Core**: Node.js **v22+**, Express.js **v5** (Latest Express wildcard routes)
+* **Database**: MongoDB (Mongoose ODM)
+* **Cloud Storage**: Multer (In-memory Storage) & **Cloudinary SDK**
+* **Security**: Bcrypt password hashing & JWT auth authorization
 
 ---
 
 ## 📦 Prerequisites
 
 Make sure you have the following installed:
-
 * **Node.js v22 or above**
-* **MongoDB** (Local or MongoDB Atlas)
-* npm (comes with Node.js)
+* **MongoDB** (Local instance or MongoDB Atlas account)
+* **Cloudinary Developer Account** (for cloud-based file uploads)
 
-
-## ⚠️ Notes & Troubleshooting
-- While integrating **React Quill**, version compatibility issues were encountered during development.
-- To ensure stability with React 18 and Vite, a compatible version of `react-quill` was used.
-- If you face runtime or build errors related to React Quill, ensure the installed version matches the one specified in `package.json`.
-
-
-Check versions:
-
+Check system versions:
 ```bash
 node -v
 npm -v
@@ -67,223 +53,118 @@ npm -v
 
 ---
 
-## 📁 Project Structure
-
-```
-blog-platform/
-├── client/                 # React frontend
-│   ├── src/
-│   │   ├── components/
-│   │   ├── pages/
-│   │   ├── context/
-│   │   ├── api/
-│   │   └── main.jsx
-│   ├── public/
-│   └── package.json
-│
-├── server/                 # Express backend
-│   ├── controllers/
-│   ├── models/
-│   ├── routes/
-│   ├── middleware/
-│   ├── uploads/            # Uploaded images
-│   ├── app.js / index.js
-│   └── package.json
-│
-├── .env.example
-├── README.md
-└── package.json (optional root)
-```
-
----
-
 ## ⚙️ Environment Variables
 
-Create a `.env` file inside the **server** folder.
-
-### `.env.example`
+### Backend (`/server/.env`)
+Create a `.env` file inside the `server/` directory and configure the variables:
 
 ```env
 PORT=5000
 MONGO_URI=mongodb://127.0.0.1:27017/blog_platform
 JWT_SECRET=your_jwt_secret_key
+
+# Cloudinary Integration API Keys
+CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+CLOUDINARY_API_KEY=your_cloudinary_api_key
+CLOUDINARY_API_SECRET=your_cloudinary_api_secret
 ```
 
-📌 Replace values according to your setup.
+### Frontend (`/client/.env`)
+Create a `.env` file inside the `client/` directory:
+
+```env
+VITE_API_URL=http://localhost:5000/api
+```
 
 ---
 
 ## 📥 Installation Steps
 
 ### 1️⃣ Clone the repository
-
 ```bash
 git clone <your-github-repo-url>
 cd blog-platform
 ```
 
----
-
-### 2️⃣ Backend Setup
-
+### 2️⃣ Backend Server Setup
 ```bash
 cd server
 npm install
 ```
-
-Start backend server:
-
+Start Express server:
 ```bash
 npm run dev
 ```
+Backend server listens at: `http://localhost:5000`
 
-Backend runs at:
-
-```
-http://localhost:5000
-```
-
----
-
-### 3️⃣ Frontend Setup
-
+### 3️⃣ Frontend Client Setup
 ```bash
-cd client
+cd ../client
 npm install
 ```
-
-Start frontend:
-
+Start Vite development server:
 ```bash
 npm run dev
 ```
-
-Frontend runs at:
-
-```
-http://localhost:5173
-```
+Frontend client listens at: `http://localhost:5173`
 
 ---
 
 ## 🗄 Database Seeding
 
-A seed script is included to populate sample data.
+A database seeding script is provided to pre-populate Mongo collections with sample mock accounts and formatted blog posts.
 
-### Seed includes:
-
-* 5 users
-* 15 blog posts (draft + published)
-
-Run seed command:
-
+Run the seed script from the server folder:
 ```bash
+cd server
 npm run seed
 ```
-
-📌 Make sure MongoDB is running before seeding.
-
----
-
-## 🔍 API Testing Instructions
-
-You can test APIs using **Postman** or **Thunder Client**.
-
-### Example APIs
-
-* **Auth**
-
-  * `POST /api/auth/register`
-  * `POST /api/auth/login`
-
-* **Posts**
-
-  * `POST /api/posts` (Create – Draft)
-  * `PATCH /api/posts/:id/status` (Publish)
-  * `GET /api/posts` (Published posts)
-  * `GET /api/posts/my` (User posts)
-  * `PUT /api/posts/:id` (Edit post)
-
-* **Search**
-
-  * `GET /api/posts/search?q=keyword`
-
-* **Comments**
-
-  * `GET /api/comments/:postId`
-  * `POST /api/comments/:postId`
-  * `DELETE /api/comments/:commentId`
-
-📌 Protected routes require:
-
-```
-Authorization: Bearer <JWT_TOKEN>
-```
+*(Ensure MongoDB service is running on your system before launching).*
 
 ---
 
-## 🖼 Image Upload Handling
-
-* Images are uploaded using **Multer**
-* Stored in `/server/uploads`
-* Served via Express static middleware
-* Database stores **relative paths** (e.g. `/uploads/image.png`)
-
-Access example:
-
-```
-http://localhost:5000/uploads/image.png
-```
+## 🖼 Cloudinary Upload Handling
+* **In-Memory Buffer Stream**: Local file writes are entirely replaced. The server parses file attachments using `multer.memoryStorage()`, streaming the binary content directly to the Cloudinary API.
+* **Dynamic URL Delivery**: Database collections store secure HTTPS cloud URLs returned by Cloudinary.
+* **Legacy Portability**: The client is equipped with backward compatibility handlers, allowing both static, legacy `/uploads/` URLs and Cloudinary assets to render side-by-side.
 
 ---
 
-## 🔐 Authentication & Security
+## 🔍 API Testing References
 
-* Passwords hashed using **bcrypt**
-* JWT used for authentication
-* Role-based authorization (author-only edit/delete)
-* Protected routes via middleware
-* Environment variables for sensitive data
+You can trigger backend tests using Postman, Thunder Client, or cURL.
 
----
+* **Authentication Routes**:
+  * `POST /api/auth/register` (Register a new account)
+  * `POST /api/auth/login` (Authenticate and retrieve JWT)
 
-## 🎨 UI & Responsiveness
+* **Post Operations**:
+  * `POST /api/posts` (Create draft post, includes optional `image` payload)
+  * `PATCH /api/posts/:id/status` (Toggle status to published)
+  * `GET /api/posts` (Fetch published articles)
+  * `GET /api/posts/my` (Fetch authenticated user's draft & published posts)
+  * `PUT /api/posts/:id` (Edit existing post contents)
 
-* Tailwind CSS v3 used throughout
-* Mobile-first responsive design
-* Consistent button styles and spacing
-* Clean blog-style layout suitable for real products
+* **Comments & Likes**:
+  * `GET /api/comments/:postId` (Fetch article comments)
+  * `POST /api/comments/:postId` (Post a comment)
+  * `DELETE /api/comments/:commentId` (Remove a comment - authorized only)
+  * `POST /api/posts/:id/like` (Toggle heart like status)
+
+*Protected routes require passing `Authorization: Bearer <JWT_TOKEN>` headers.*
 
 ---
 
 ## 🧠 Key Design Decisions
 
-* Draft posts are **not visible** to other users
-* Only authors can edit or publish their posts
-* Search works only on **published posts**
-* Image paths stored as relative URLs for portability
-* Clean separation of frontend and backend concerns
-
----
-
-## ✅ Evaluation Readiness
-
-This project satisfies **all assignment requirements**:
-
-* ✔ Rich text editor integration
-* ✔ Image upload & display
-* ✔ Draft & publish workflow
-* ✔ Comment & like system
-* ✔ Search by title/content
-* ✔ User profile with posts
-* ✔ Responsive UI
-* ✔ Clean code & documentation
+* **Express 5 Support**: Configured wildcard route mappings using Express v5 compliant param capture formats (`/*splat`) to handle Single Page App (SPA) routers correctly without crashes.
+* **Axios 401 Interceptor Safeguard**: Enhanced response failure interceptors to exclude `/auth/login` attempts, ensuring wrong passwords display visible warnings instead of triggering loops.
+* **Default Theme State**: Pre-loaded the React application to boot into persistent dark mode to give the platform a premium first-impression.
+* **Real-time Image Select Previews**: Added automatic object URL generation in editing and creation studios, letting authors preview graphic headers immediately upon picking files.
 
 ---
 
 ## 👤 Author
 
 **Ritesh Kumar**
-Full Stack Developer (MERN)
-
----
+*Full Stack Developer (MERN)*

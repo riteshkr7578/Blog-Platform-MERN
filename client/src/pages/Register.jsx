@@ -56,47 +56,51 @@ export default function Register() {
   };
 
   return (
-    <section className="flex items-center justify-center min-h-screen px-4 bg-gray-50">
+    <section className="min-h-[calc(100vh-76px)] flex items-center justify-center bg-slate-50/50 dark:bg-[#0b0f19] px-4 py-12 transition-all duration-300">
       <form
         onSubmit={submit}
-        className="w-full max-w-md p-8 bg-white border shadow-sm rounded-xl"
+        className="w-full max-w-md bg-white dark:bg-slate-900 p-8 md:p-10 rounded-2xl border border-slate-100 dark:border-slate-800 shadow-xl shadow-slate-100/40 dark:shadow-none transition-all duration-300"
       >
         {/* Header */}
-        <h2 className="mb-2 text-3xl font-extrabold text-center text-gray-900">
-          Create Account
-        </h2>
-        <p className="mb-6 text-sm text-center text-gray-500">
-          Sign up to start writing on BlogApp
-        </p>
+        <div className="text-center mb-8">
+          <div className="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-indigo-50 dark:bg-indigo-950/30 text-xl mb-4">
+            ✍️
+          </div>
+          <h2 className="text-3xl font-extrabold text-slate-900 dark:text-slate-100 tracking-tight">
+            Create Account
+          </h2>
+          <p className="text-sm text-slate-500 dark:text-slate-400 mt-2">
+            Sign up to start writing on <span className="font-semibold text-indigo-600 dark:text-indigo-400">BlogSphere</span>
+          </p>
+        </div>
 
         {/* Submit Error */}
         {errors.submit && (
-          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+          <div className="mb-6 p-3 bg-red-50 dark:bg-red-950/20 border border-red-100 dark:border-red-900/50 rounded-xl text-red-600 dark:text-red-400 text-sm font-medium">
             {errors.submit}
           </div>
         )}
 
         {/* Name */}
-        <div className="mb-4">
-          <label className="block mb-1 text-sm font-semibold text-gray-700">
-            Name
+        <div className="mb-5">
+          <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Full Name
           </label>
           <input
             name="name"
             value={form.name}
             placeholder="Your full name"
             onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-              errors.name ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
-            }`}
+            className={`form-input ${errors.name ? "border-red-500 focus:ring-red-500/10" : ""}`}
+            required
           />
-          {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
+          {errors.name && <p className="mt-1.5 text-xs text-red-600 font-medium">{errors.name}</p>}
         </div>
 
         {/* Email */}
-        <div className="mb-4">
-          <label className="block mb-1 text-sm font-semibold text-gray-700">
-            Email
+        <div className="mb-5">
+          <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
+            Email Address
           </label>
           <input
             name="email"
@@ -104,16 +108,15 @@ export default function Register() {
             value={form.email}
             placeholder="you@example.com"
             onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-              errors.email ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
-            }`}
+            className={`form-input ${errors.email ? "border-red-500 focus:ring-red-500/10" : ""}`}
+            required
           />
-          {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
+          {errors.email && <p className="mt-1.5 text-xs text-red-600 font-medium">{errors.email}</p>}
         </div>
 
         {/* Password */}
         <div className="mb-6">
-          <label className="block mb-1 text-sm font-semibold text-gray-700">
+          <label className="block mb-2 text-sm font-semibold text-slate-700 dark:text-slate-300">
             Password
           </label>
           <input
@@ -122,29 +125,28 @@ export default function Register() {
             value={form.password}
             placeholder="••••••••"
             onChange={handleChange}
-            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
-              errors.password ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
-            }`}
+            className={`form-input ${errors.password ? "border-red-500 focus:ring-red-500/10" : ""}`}
+            required
           />
-          {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
-          <p className="mt-1 text-xs text-gray-500">Minimum 6 characters</p>
+          {errors.password && <p className="mt-1.5 text-xs text-red-600 font-medium">{errors.password}</p>}
+          {!errors.password && <p className="mt-1.5 text-xs text-slate-400 dark:text-slate-500">Minimum 6 characters</p>}
         </div>
 
         {/* Button */}
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
+          className="w-full btn-indigo py-3 text-base disabled:bg-slate-200 dark:disabled:bg-slate-800 disabled:text-slate-400 dark:disabled:text-slate-600 disabled:cursor-not-allowed disabled:transform-none"
         >
-          {loading ? "Registering..." : "Register"}
+          {loading ? "Creating Account..." : "Register"}
         </button>
 
         {/* Footer */}
-        <p className="mt-6 text-sm text-center text-gray-500">
+        <p className="mt-8 text-sm text-center text-slate-500 dark:text-slate-400">
           Already have an account?{" "}
           <span
             onClick={() => navigate("/login")}
-            className="font-semibold text-blue-600 cursor-pointer hover:underline"
+            className="font-semibold text-indigo-600 dark:text-indigo-400 cursor-pointer hover:underline hover:text-indigo-700 dark:hover:text-indigo-300"
           >
             Login
           </span>
