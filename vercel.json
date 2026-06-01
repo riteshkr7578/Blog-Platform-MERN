@@ -1,0 +1,5 @@
+{
+  "buildCommand": "npm run build --prefix client && npm install --prefix server",
+  "outputDirectory": "server"
+}
+
