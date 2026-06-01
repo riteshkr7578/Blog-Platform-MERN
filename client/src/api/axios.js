@@ -1,7 +1,9 @@
 import axios from "axios";
 
+const baseURL = import.meta.env.VITE_API_URL;
+
 const api = axios.create({
-  baseURL: "https://blogsphere-full-stack-content-management.onrender.com/api"
+  baseURL: baseURL
 });
 
 api.interceptors.request.use((req) => {
