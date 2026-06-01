@@ -4,16 +4,47 @@ import { useNavigate } from "react-router-dom";
 
 export default function Register() {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
+  const [errors, setErrors] = useState({});
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  const handleChange = (e) =>
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setForm({ ...form, [name]: value });
+    // Clear error when user starts typing
+    if (errors[name]) {
+      setErrors({ ...errors, [name]: "" });
+    }
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+    if (!form.name.trim()) newErrors.name = "Name is required";
+    if (!form.email.trim()) newErrors.email = "Email is required";
+    if (!form.password) newErrors.password = "Password is required";
+    else if (form.password.length < 6) newErrors.password = "Password must be at least 6 characters";
+    return newErrors;
+  };
 
   const submit = async (e) => {
     e.preventDefault();
-    await api.post("/auth/register", form);
-    alert("Registration successful");
-    navigate("/login");
+    const newErrors = validateForm();
+    
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await api.post("/auth/register", form);
+      alert("Registration successful");
+      navigate("/login");
+    } catch (err) {
+      setErrors({ submit: err.response?.data?.message || "Registration failed" });
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -30,6 +61,13 @@ export default function Register() {
           Sign up to start writing on BlogApp
         </p>
 
+        {/* Submit Error */}
+        {errors.submit && (
+          <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+            {errors.submit}
+          </div>
+        )}
+
         {/* Name */}
         <div className="mb-4">
           <label className="block mb-1 text-sm font-semibold text-gray-700">
@@ -37,10 +75,14 @@ export default function Register() {
           </label>
           <input
             name="name"
+            value={form.name}
             placeholder="Your full name"
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+              errors.name ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
+            }`}
           />
+          {errors.name && <p className="mt-1 text-sm text-red-600">{errors.name}</p>}
         </div>
 
         {/* Email */}
@@ -51,10 +93,14 @@ export default function Register() {
           <input
             name="email"
             type="email"
+            value={form.email}
             placeholder="you@example.com"
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+              errors.email ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
+            }`}
           />
+          {errors.email && <p className="mt-1 text-sm text-red-600">{errors.email}</p>}
         </div>
 
         {/* Password */}
@@ -65,18 +111,24 @@ export default function Register() {
           <input
             name="password"
             type="password"
+            value={form.password}
             placeholder="••••••••"
             onChange={handleChange}
-            className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 ${
+              errors.password ? "border-red-500 focus:ring-red-500" : "focus:ring-blue-500"
+            }`}
           />
+          {errors.password && <p className="mt-1 text-sm text-red-600">{errors.password}</p>}
+          <p className="mt-1 text-xs text-gray-500">Minimum 6 characters</p>
         </div>
 
         {/* Button */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition"
+          disabled={loading}
+          className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 transition disabled:bg-gray-400 disabled:cursor-not-allowed"
         >
-          Register
+          {loading ? "Registering..." : "Register"}
         </button>
 
         {/* Footer */}
