@@ -3,6 +3,5 @@ node_modules
 .gitignore
 README.md
 .env.example
-server/node_modules
-client/node_modules
-client/src
+server/
+
