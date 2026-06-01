@@ -1,15 +1,26 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import api from "../api/axios";
+import { useAuth } from "../context/AuthContext";
 
 export default function Profile() {
+  const { userId } = useParams();
+  const { user } = useAuth();
   const [posts, setPosts] = useState([]);
 
+  const isOwnProfile = user && user.id === userId;
+
   useEffect(() => {
-    api.get("/posts/my").then((res) => {
-      setPosts(res.data);
-    });
-  }, []);
+    const endpoint = isOwnProfile ? "/posts/my" : `/posts/user/${userId}`;
+    api.get(endpoint)
+      .then((res) => {
+        setPosts(Array.isArray(res.data) ? res.data : []);
+      })
+      .catch((err) => {
+        console.error("Fetch profile posts failed:", err);
+        setPosts([]);
+      });
+  }, [userId, isOwnProfile]);
 
   const publishPost = async (id) => {
     await api.patch(`/posts/${id}/status`);
@@ -25,10 +36,10 @@ export default function Profile() {
         {/* Header */}
         <div className="mb-8">
           <h1 className="text-3xl font-extrabold text-gray-900">
-            My Posts
+            {isOwnProfile ? "My Posts" : "User Posts"}
           </h1>
           <p className="text-gray-600 mt-1">
-            Manage your drafts and published posts
+            {isOwnProfile ? "Manage your drafts and published posts" : "Explore posts from this writer"}
           </p>
         </div>
 
@@ -48,7 +59,7 @@ export default function Profile() {
               {/* IMAGE */}
               {post.image && (
                 <img
-                  src={`http://localhost:5000${post.image}`}
+                  src={post.image.startsWith("http") ? post.image : `${(import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace("/api", "")}${post.image}`}
                   alt={post.title}
                   className="h-44 w-full object-cover"
                 />
@@ -77,23 +88,25 @@ export default function Profile() {
                 </span>
 
                 {/* ACTIONS */}
-                <div className="mt-auto pt-4 flex items-center gap-3">
-                  <Link
-                    to={`/edit/${post._id}`}
-                    className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50 transition"
-                  >
-                    Edit
-                  </Link>
-
-                  {post.status === "draft" && (
-                    <button
-                      onClick={() => publishPost(post._id)}
-                      className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                {isOwnProfile && (
+                  <div className="mt-auto pt-4 flex items-center gap-3">
+                    <Link
+                      to={`/edit/${post._id}`}
+                      className="px-4 py-2 text-sm border rounded-lg hover:bg-gray-50 transition"
                     >
-                      Publish
-                    </button>
-                  )}
-                </div>
+                      Edit
+                    </Link>
+
+                    {post.status === "draft" && (
+                      <button
+                        onClick={() => publishPost(post._id)}
+                        className="px-4 py-2 text-sm bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+                      >
+                        Publish
+                      </button>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           ))}

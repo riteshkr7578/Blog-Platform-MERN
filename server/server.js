@@ -25,7 +25,7 @@ const clientPath = isDev
 if (require("fs").existsSync(clientPath)) {
   app.use(express.static(clientPath));
   // SPA fallback for all non-API routes
-  app.get("*", (req, res) => {
+  app.get("/*splat", (req, res) => {
     res.sendFile(path.join(clientPath, "index.html"));
   });
 }

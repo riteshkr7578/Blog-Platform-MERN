@@ -16,7 +16,7 @@ const Post = require("../models/Post");
       category,
       author: req.user,
       status: "draft",
-      image: req.file ? `/uploads/${req.file.filename}` : null
+      image: req.file ? req.file.path : null
     });
 
     res.status(201).json(post);
@@ -69,7 +69,7 @@ exports.updatePost = async (req, res) => {
     post.category = req.body.category || post.category;
 
  if (req.file) {
-  post.image = `/uploads/${req.file.filename}`;
+  post.image = req.file.path;
 }
 
     await post.save();

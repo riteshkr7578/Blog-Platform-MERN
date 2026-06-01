@@ -6,7 +6,7 @@ export default function PostCard({ post }) {
       
       {post.image && (
         <img
-          src={`http://localhost:5000${post.image}`}
+          src={post.image.startsWith("http") ? post.image : `${(import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace("/api", "")}${post.image}`}
           alt={post.title}
           className="w-full h-48 object-cover"
         />

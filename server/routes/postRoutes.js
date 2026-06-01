@@ -1,7 +1,6 @@
 const express = require("express");
 const auth = require("../middleware/authMiddleware");
-const upload = require("../middleware/upload"); // multer config
-
+const { upload, handleCloudinaryUpload } = require("../middleware/upload"); // multer config
 const {
   createPost,
   getPublishedPosts,
@@ -28,8 +27,9 @@ router.get("/user/:userId", getUserProfilePosts);
 router.get("/my", auth, getMyPosts);
 
 // CREATE / UPDATE
-router.post("/", auth, upload.single("image"), createPost);
-router.put("/:id", auth, upload.single("image"), updatePost);
+router.post("/", auth, upload.single("image"), handleCloudinaryUpload, createPost);
+router.put("/:id", auth, upload.single("image"), handleCloudinaryUpload, updatePost);
+
 router.patch("/:id/status", auth, togglePostStatus);
 router.post("/:id/like", auth, toggleLike);
 

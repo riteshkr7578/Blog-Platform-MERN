@@ -26,7 +26,7 @@ export default function PostDetail() {
       {/* ✅ IMAGE */}
       {post.image && (
         <img
-          src={`http://localhost:5000${post.image}`}
+          src={post.image.startsWith("http") ? post.image : `${(import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace("/api", "")}${post.image}`}
           className="w-full h-60 object-cover rounded mb-4"
           alt={post.title}
         />

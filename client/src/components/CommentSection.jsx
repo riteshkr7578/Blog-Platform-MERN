@@ -10,9 +10,14 @@ export default function CommentSection({ postId }) {
 
   // Fetch comments
   useEffect(() => {
-    api.get(`/comments/${postId}`).then(res => {
-      setComments(res.data);
-    });
+    api.get(`/comments/${postId}`)
+      .then(res => {
+        setComments(Array.isArray(res.data) ? res.data : []);
+      })
+      .catch(err => {
+        console.error("Fetch comments failed:", err);
+        setComments([]);
+      });
   }, [postId]);
 
   // Add comment

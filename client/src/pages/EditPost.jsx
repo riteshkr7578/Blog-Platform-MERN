@@ -12,7 +12,16 @@ export default function EditPost() {
   const [content, setContent] = useState("");
   const [category, setCategory] = useState("Technology");
   const [image, setImage] = useState(null);
+  const [preview, setPreview] = useState(null);
   const [loading, setLoading] = useState(true);
+
+  const handleImage = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setImage(file);
+      setPreview(URL.createObjectURL(file));
+    }
+  };
 
   useEffect(() => {
     api.get(`/posts/${id}`)
@@ -21,6 +30,12 @@ export default function EditPost() {
         setTitle(res.data.title || "");
         setContent(res.data.content || "");
         setCategory(res.data.category || "Technology");
+        if (res.data.image) {
+          const apiBase = import.meta.env.VITE_API_URL || "http://localhost:5000/api";
+          const serverBase = apiBase.replace("/api", "");
+          const fullImageUrl = res.data.image.startsWith("http") ? res.data.image : `${serverBase}${res.data.image}`;
+          setPreview(fullImageUrl);
+        }
         setLoading(false);
       })
       .catch(() => setLoading(false));
@@ -101,9 +116,18 @@ export default function EditPost() {
           </label>
           <input
             type="file"
-            onChange={(e) => setImage(e.target.files[0])}
-            className="block text-sm text-gray-600"
+            accept="image/*"
+            onChange={handleImage}
+            className="block w-full text-sm text-gray-600 mb-4"
           />
+
+          {preview && (
+            <img
+              src={preview}
+              className="h-52 w-full object-cover rounded-lg border"
+              alt="preview"
+            />
+          )}
         </div>
 
         {/* Actions */}

@@ -2,6 +2,8 @@ import { useState } from "react";
 import ReactQuill from "react-quill";
 import "react-quill/dist/quill.snow.css";
 import api from "../api/axios";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 export default function CreatePost() {
   const [title, setTitle] = useState("");
@@ -9,6 +11,9 @@ export default function CreatePost() {
   const [category, setCategory] = useState("Technology");
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null);
+
+  const navigate = useNavigate();
+  const { user } = useAuth();
 
   const submitPost = async () => {
     const formData = new FormData();
@@ -19,6 +24,11 @@ export default function CreatePost() {
 
     await api.post("/posts", formData);
     alert("Post saved as draft");
+    if (user) {
+      navigate(`/profile/${user.id}`);
+    } else {
+      navigate("/");
+    }
   };
 
   const handleImage = (e) => {

@@ -11,13 +11,25 @@ export default function Home() {
     if (!query.trim()) return;
 
     setLoading(true);
-    const res = await api.get(`/posts/search?q=${query}`);
-    setPosts(res.data);
+    try {
+      const res = await api.get(`/posts/search?q=${query}`);
+      setPosts(Array.isArray(res.data) ? res.data : []);
+    } catch (err) {
+      console.error("Search failed:", err);
+      setPosts([]);
+    }
     setLoading(false);
   };
 
   useEffect(() => {
-    api.get("/posts").then((res) => setPosts(res.data));
+    api.get("/posts")
+      .then((res) => {
+        setPosts(Array.isArray(res.data) ? res.data : []);
+      })
+      .catch((err) => {
+        console.error("Fetch posts failed:", err);
+        setPosts([]);
+      });
   }, []);
 
   return (

@@ -1,24 +1,20 @@
 const multer = require("multer");
-const path = require("path");
-const fs = require("fs");
+const cloudinary = require("cloudinary").v2;
 
-const uploadDir = path.join(__dirname, "../uploads");
-
-// Ensure uploads folder exists
-if (!fs.existsSync(uploadDir)) {
-  fs.mkdirSync(uploadDir, { recursive: true });
+// Configure Cloudinary
+// Check if credentials are present, otherwise log warning
+if (process.env.CLOUDINARY_CLOUD_NAME && process.env.CLOUDINARY_API_KEY && process.env.CLOUDINARY_API_SECRET) {
+  cloudinary.config({
+    cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+    api_key: process.env.CLOUDINARY_API_KEY,
+    api_secret: process.env.CLOUDINARY_API_SECRET
+  });
+} else {
+  console.warn("WARNING: Cloudinary is not fully configured in environment variables!");
 }
 
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, uploadDir);
-  },
-  filename: function (req, file, cb) {
-    const uniqueName =
-      Date.now() + "-" + Math.round(Math.random() * 1e9);
-    cb(null, uniqueName + path.extname(file.originalname));
-  }
-});
+// Memory storage is used since we stream directly to Cloudinary
+const storage = multer.memoryStorage();
 
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
@@ -33,8 +29,49 @@ const upload = multer({
   storage,
   fileFilter,
   limits: {
-    fileSize: 5 * 1024 * 1024
+    fileSize: 5 * 1024 * 1024 // 5MB limit
   }
 });
 
-module.exports = upload;
+// Middleware to upload file to Cloudinary
+const handleCloudinaryUpload = async (req, res, next) => {
+  if (!req.file) {
+    return next();
+  }
+
+  // Ensure Cloudinary is configured
+  if (!process.env.CLOUDINARY_CLOUD_NAME || process.env.CLOUDINARY_CLOUD_NAME === "your_cloud_name") {
+    return res.status(500).json({
+      message: "Cloudinary upload failed: Cloud name is not configured. Please add CLOUDINARY_CLOUD_NAME to server/.env file."
+    });
+  }
+
+  try {
+    const uploadStream = cloudinary.uploader.upload_stream(
+      {
+        folder: "blog_platform",
+        resource_type: "auto"
+      },
+      (error, result) => {
+        if (error) {
+          console.error("Cloudinary Upload Error:", error);
+          return res.status(500).json({ message: "Cloudinary upload failed", error: error.message });
+        }
+        // Store the secure url in req.file.path so controllers can use it uniformly
+        req.file.path = result.secure_url;
+        next();
+      }
+    );
+
+    uploadStream.end(req.file.buffer);
+  } catch (error) {
+    console.error("Cloudinary upload middleware error:", error);
+    res.status(500).json({ message: "Server error during image upload", error: error.message });
+  }
+};
+
+module.exports = {
+  upload,
+  handleCloudinaryUpload
+};
+
